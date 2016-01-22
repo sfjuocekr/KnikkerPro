@@ -6,7 +6,7 @@ public class StickyJoint : MonoBehaviour
 	void OnCollisionEnter (Collision c)
 	{
 		if (c.gameObject.tag == "Sticky") {
-			SpringJoint _joint = gameObject.AddComponent<SpringJoint> ();
+			//SpringJoint _joint = gameObject.AddComponent<SpringJoint> ();
 			/*_joint.connectedBody = c.rigidbody;
 			_joint.breakForce = 0.1f;
 			_joint.minDistance = 0f;

@@ -12,12 +12,16 @@ public class MarbleController : MonoBehaviour
 	private Dictionary<string, int> PowerUps;
 	private Dictionary<string, Action> Powers;
 
+	public List<string> TableNames;
 	private bool _grounded;
 
 	void Start ()
 	{
 		// Set score to zero when this object is created.
 		PlayerScore = 0;
+
+		if (TableNames.Count == 0)
+			TableNames.Add("TableTop");
 
 		// We can not jump yet!
 		_grounded = false;
@@ -34,7 +38,7 @@ public class MarbleController : MonoBehaviour
 		};
 	}
 
-	void Update ()
+	void FixedUpdate ()
 	{
 		if (Input.GetButtonDown ("Jump") && _grounded)
 			UsePowerUp ("Jump");
@@ -49,14 +53,16 @@ public class MarbleController : MonoBehaviour
 
 	void OnCollisionStay (Collision _collision)
 	{
-		if (_collision.gameObject.name == "TableTop" || _collision.gameObject.name == "Bridge")
-			_grounded = true;
+		foreach (string _tableName in TableNames)
+			if (_collision.gameObject.name == _tableName)
+				_grounded = true;
 	}
 
 	void OnCollisionExit (Collision _collision)
 	{
-		if (_collision.gameObject.name == "TableTop" || _collision.gameObject.name == "Bridge")
-			_grounded = false;
+		foreach (string _tableName in TableNames)
+			if (_collision.gameObject.name == _tableName)
+				_grounded = false;
 	}
 
 	void AddPowerUp (string _power)
@@ -116,6 +122,6 @@ public class MarbleController : MonoBehaviour
 		Debug.Log ("Jump!");
 
 		// Jump based on table rotation.
-		GetComponent<Rigidbody> ().AddForce (GameObject.Find ("Table").transform.up * Physics.gravity.y * -150);
+		GetComponent<Rigidbody> ().AddForce (GameObject.FindGameObjectWithTag("Table").transform.up * Physics.gravity.y * -150);
 	}
 }
