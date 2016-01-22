@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class MarbleController : MonoBehaviour
 {
+	public bool DirectControl = false;
+
 	// A place to save the score of the player, this is hidden from the editor.
 	[HideInInspector]
 	public static int PlayerScore;
@@ -13,7 +15,11 @@ public class MarbleController : MonoBehaviour
 	private Dictionary<string, Action> Powers;
 
 	public List<string> TableNames;
-	private bool _grounded;
+
+	private bool _grounded = false;
+	private bool _jumping = false;
+
+	public float MoveForce = 20f;
 
 	void Start ()
 	{
@@ -25,6 +31,7 @@ public class MarbleController : MonoBehaviour
 
 		// We can not jump yet!
 		_grounded = false;
+		_jumping = false;
 
 		// Initialize the power-up dictionaries.
 		Powers = new Dictionary<string, Action> () {
@@ -38,13 +45,33 @@ public class MarbleController : MonoBehaviour
 		};
 	}
 
+	void Update ()
+	{
+		Debug.Log (_grounded);
+		Debug.Log (_jumping);
+	}
+
 	void FixedUpdate ()
 	{
-		if (Input.GetButtonDown ("Jump") && _grounded)
+		if (Input.GetButtonDown ("Jump") && _grounded && !_jumping) {
 			UsePowerUp ("Jump");
+		}
 
 		/*if (Input.GetButtonDown("Fire2") && _grounded)
             UsePowerUp("Boost");*/
+
+		if (DirectControl && _grounded && !_jumping)
+		{
+			if (Input.GetButton("Horizontal"))
+			{
+				GetComponent<Rigidbody> ().AddForce (transform.forward * MoveForce * Input.GetAxis("Horizontal"));
+			}
+
+			if (Input.GetButton("Vertical"))
+			{
+				GetComponent<Rigidbody> ().AddForce (transform.right * MoveForce * -Input.GetAxis("Vertical"));
+			}
+		}
 	}
 
 	void OnCollisionEnter (Collision _collision)
@@ -109,7 +136,8 @@ public class MarbleController : MonoBehaviour
 		Action _usablePower;
 
 		// Check if power-up can be used.
-		if (RemovePowerUp (_power)) {
+		if (RemovePowerUp (_power))
+		{
 			// YES? EXECUTE!!!
 			Powers.TryGetValue (_power, out _usablePower);
 
@@ -119,9 +147,15 @@ public class MarbleController : MonoBehaviour
 
 	void Jump ()
 	{
-		Debug.Log ("Jump!");
+		_jumping = true;
 
-		// Jump based on table rotation.
-		GetComponent<Rigidbody> ().AddForce (GameObject.FindGameObjectWithTag("Table").transform.up * Physics.gravity.y * -150);
+		GetComponent<Rigidbody> ().AddForce (transform.up * Physics.gravity.y * -(MoveForce * 4f));
+
+		Invoke ("StopJumping", 0.1f);
+	}
+
+	void StopJumping ()
+	{
+		_jumping = false;
 	}
 }

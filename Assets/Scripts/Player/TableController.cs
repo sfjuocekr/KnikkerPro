@@ -10,12 +10,7 @@ public class TableController : MonoBehaviour
 	private float _vertical;
 	private float _speed;
 
-	private bool _boost;
-
-	private GameObject BallStand;
-
-	private GameObject HorizontalGuide;
-	private GameObject VerticalGuide;
+	public float BaseSpeed = 0.2f;
 
 	void Start ()
 	{
@@ -30,7 +25,7 @@ public class TableController : MonoBehaviour
 		_vertical = Input.GetAxisRaw ("Vertical");
 
 		// Check if shift is pressed.
-		_speed = Input.GetButton ("Fire3") ? 0.4f : 0.2f;
+		_speed = Input.GetButton ("Fire3") ? BaseSpeed * 2f : BaseSpeed;
 	}
 
 	void FixedUpdate ()

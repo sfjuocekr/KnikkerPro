@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RotateThingy : MonoBehaviour
+public class Rotate : MonoBehaviour
 {
 	public float Speed = 90f;
 
