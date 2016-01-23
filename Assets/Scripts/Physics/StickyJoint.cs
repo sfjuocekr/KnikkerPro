@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class StickyJoint : MonoBehaviour
 {
-	private List<string> _tableNames;
+	private List<string> _colliderNames;
 
 	void Start ()
 	{
-		_tableNames = GameObject.FindGameObjectWithTag ("Player").GetComponent<MarbleController> ().TableNames;
+		_colliderNames = GameObject.FindGameObjectWithTag ("Player").GetComponent<MarbleController> ().ColliderNames;
 	}
 
 	void OnCollisionEnter (Collision _collision)
 	{
-		foreach (string _tableName in _tableNames)
+		foreach (string _tableName in _colliderNames)
 			if (_collision.gameObject.name == _tableName)
 			{
 				FixedJoint _joint = gameObject.GetComponent<FixedJoint> ();
@@ -27,7 +27,7 @@ public class StickyJoint : MonoBehaviour
 
 	void OnCollisionExit (Collision _collision)
 	{
-		foreach (string _tableName in _tableNames)
+		foreach (string _tableName in _colliderNames)
 			if (_collision.gameObject.name == _tableName)
 			{
 				Destroy (gameObject.GetComponent<FixedJoint> ());

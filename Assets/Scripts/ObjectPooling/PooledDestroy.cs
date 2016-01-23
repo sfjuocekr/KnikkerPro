@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PooledDestroy : MonoBehaviour {
+public class PooledDestroy : MonoBehaviour
+{
 	public bool Timer = true;
 	public float AliveTime = 10f;
 
@@ -10,7 +11,8 @@ public class PooledDestroy : MonoBehaviour {
 		Invoke ("Destroy", AliveTime);
 	}
 
-	void Destroy () {
+	void Destroy ()
+	{
 		gameObject.SetActive(false);
 	}
 

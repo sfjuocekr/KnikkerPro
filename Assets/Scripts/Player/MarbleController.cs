@@ -14,7 +14,7 @@ public class MarbleController : MonoBehaviour
 	private Dictionary<string, int> PowerUps;
 	private Dictionary<string, Action> Powers;
 
-	public List<string> TableNames;
+	public List<string> ColliderNames;
 
 	private bool _grounded = false;
 	private bool _jumping = false;
@@ -26,8 +26,8 @@ public class MarbleController : MonoBehaviour
 		// Set score to zero when this object is created.
 		PlayerScore = 0;
 
-		if (TableNames.Count == 0)
-			TableNames.Add("TableTop");
+		if (ColliderNames.Count == 0)
+			ColliderNames.Add("TableTop");
 
 		// We can not jump yet!
 		_grounded = false;
@@ -45,11 +45,11 @@ public class MarbleController : MonoBehaviour
 		};
 	}
 
-	void Update ()
+	/*awvoid Update ()
 	{
 		Debug.Log (_grounded);
 		Debug.Log (_jumping);
-	}
+	}*/
 
 	void FixedUpdate ()
 	{
@@ -64,12 +64,12 @@ public class MarbleController : MonoBehaviour
 		{
 			if (Input.GetButton("Horizontal"))
 			{
-				GetComponent<Rigidbody> ().AddForce (transform.forward * MoveForce * Input.GetAxis("Horizontal"));
+				GetComponent<Rigidbody> ().AddForce (Vector3.forward * MoveForce * Input.GetAxis("Horizontal"));
 			}
 
 			if (Input.GetButton("Vertical"))
 			{
-				GetComponent<Rigidbody> ().AddForce (transform.right * MoveForce * -Input.GetAxis("Vertical"));
+				GetComponent<Rigidbody> ().AddForce (Vector3.right * MoveForce * -Input.GetAxis("Vertical"));
 			}
 		}
 	}
@@ -80,14 +80,14 @@ public class MarbleController : MonoBehaviour
 
 	void OnCollisionStay (Collision _collision)
 	{
-		foreach (string _tableName in TableNames)
+		foreach (string _tableName in ColliderNames)
 			if (_collision.gameObject.name == _tableName)
 				_grounded = true;
 	}
 
 	void OnCollisionExit (Collision _collision)
 	{
-		foreach (string _tableName in TableNames)
+		foreach (string _tableName in ColliderNames)
 			if (_collision.gameObject.name == _tableName)
 				_grounded = false;
 	}
@@ -149,7 +149,7 @@ public class MarbleController : MonoBehaviour
 	{
 		_jumping = true;
 
-		GetComponent<Rigidbody> ().AddForce (transform.up * Physics.gravity.y * -(MoveForce * 4f));
+		GetComponent<Rigidbody> ().AddForce (Vector3.up * Physics.gravity.y * -(MoveForce * 4f));
 
 		Invoke ("StopJumping", 0.1f);
 	}
